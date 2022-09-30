@@ -1,5 +1,6 @@
 -- CptS 355 - Lab 2 (Haskell) - Fall 2022
 -- Name: Nathanael Ostheller
+--1C NOT DONE
 
 
 module Lab2
@@ -37,14 +38,17 @@ mergeN [(l:ls)] = foldl merge2 (l:ls) []
 
 -- 2
 {- (a) count -}
-
+count :: Eq a => a -> [a] -> Int
+count n [] = 0
+count n (x:xs) = length(filter (n == x) (x:xs))
 
 
 
 {- (b) histogram  -}
-
-
-
+histogram :: Eq a => [a] -> [(a, Int)]
+histogram [] = []
+histogram (x:xs) = map countAll (x:xs) (x:xs)
+     where countAll n (x:xs) = (n, (count n (x:xs)))
 
 -- 3                
 {- (a) concatAll -}
