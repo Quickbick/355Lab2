@@ -5,6 +5,8 @@
 module Lab2
      where
 
+revappend [] list = list
+revappend (x:xs) list = (revappend xs (x:list))
 
 -- 1
 {- (a) merge2 -}
@@ -20,18 +22,18 @@ merge2Tail :: [a] -> [a] -> [a]
 merge2Tail [] [] = []
 merge2Tail (x:xs) [] = (x:xs)
 merge2Tail [] (y:ys) = (y:ys)
-merge2Tail (x:xs) (y:ys) = reverse(MergeHelp (x:xs) (y:ys) [])
+merge2Tail (x:xs) (y:ys) = reverse(mergeHelp (x:xs) (y:ys) [])
      where
-          MergeHelp [] [] (zs) = (zs)
-          MergeHelp (x:xs) [] (zs) = x:xs:zs
-          MergeHelp [] (y:ys) (zs) = y:ys:zs
-          MergeHelp (x:xs) (y:ys) (zs) = revMerge xs ys 
-
+          mergeHelp [] [] (zs) = (zs)
+          mergeHelp (x:xs) [] (zs) = revappend(x:xs) (zs)
+          mergeHelp [] (y:ys) (zs) = revappend(y:ys) (zs)
+          mergeHelp (x:xs) (y:ys) (zs) = mergeHelp xs ys (y:x:zs)
 
 {- (c) mergeN -}
-
-
-
+--has non-exhaustive patterns
+mergeN:: [[a]] -> [a]
+mergeN [] = []
+mergeN [(l:ls)] = foldl merge2 (l:ls) []
 
 -- 2
 {- (a) count -}
