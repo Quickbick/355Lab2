@@ -1,6 +1,5 @@
 -- CptS 355 - Lab 2 (Haskell) - Fall 2022
 -- Name: Nathanael Ostheller
---1C NOT DONE
 
 
 module Lab2
@@ -9,46 +8,51 @@ module Lab2
 revappend [] list = list
 revappend (x:xs) list = (revappend xs (x:list))
 
+eliminateDuplicates xs = foldr elimHelp [] xs
+     where 
+          elimHelp x base | (x `elem` base) = base
+                          | otherwise = x:base
+
 -- 1
 {- (a) merge2 -}
 merge2 :: [a] -> [a] -> [a]
 merge2 [] [] = []
-merge2 (x:xs) [] = (x:xs)
-merge2 [] (y:ys) = (y:ys)
-merge2 (x:xs) (y:ys) = x:y: (merge2 xs ys)
-                         
+merge2 xs [] = xs
+merge2 [] ys = ys
+merge2 (x:xs) (y:ys) = x:y: (merge2 xs ys)            
 
 {- (b) merge2Tail -}
 merge2Tail :: [a] -> [a] -> [a]
 merge2Tail [] [] = []
-merge2Tail (x:xs) [] = (x:xs)
-merge2Tail [] (y:ys) = (y:ys)
+merge2Tail xs [] = xs
+merge2Tail [] ys = ys
 merge2Tail (x:xs) (y:ys) = reverse(mergeHelp (x:xs) (y:ys) [])
      where
-          mergeHelp [] [] (zs) = (zs)
-          mergeHelp (x:xs) [] (zs) = revappend(x:xs) (zs)
-          mergeHelp [] (y:ys) (zs) = revappend(y:ys) (zs)
+          mergeHelp [] [] zs = zs
+          mergeHelp xs [] zs = revappend xs zs
+          mergeHelp [] ys zs = revappend ys zs
           mergeHelp (x:xs) (y:ys) (zs) = mergeHelp xs ys (y:x:zs)
 
 {- (c) mergeN -}
 --has non-exhaustive patterns
 mergeN:: [[a]] -> [a]
 mergeN [] = []
-mergeN [(l:ls)] = foldl merge2 (l:ls) []
+mergeN xs = foldl merge2 [] xs
 
 -- 2
 {- (a) count -}
 count :: Eq a => a -> [a] -> Int
 count n [] = 0
-count n (x:xs) = length(filter (n == x) (x:xs))
-
-
+count n (x:xs) = length(filter eqs (x:xs))
+     where 
+          eqs x = x == n
 
 {- (b) histogram  -}
 histogram :: Eq a => [a] -> [(a, Int)]
 histogram [] = []
-histogram (x:xs) = map countAll (x:xs) (x:xs)
-     where countAll n (x:xs) = (n, (count n (x:xs)))
+histogram xs = eliminateDuplicates(map makeTuple xs)
+     where 
+          makeTuple x = (x, (count x xs))
 
 -- 3                
 {- (a) concatAll -}
