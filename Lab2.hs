@@ -56,15 +56,25 @@ histogram xs = eliminateDuplicates(map makeTuple xs)
 
 -- 3                
 {- (a) concatAll -}
-
-
-
+concatAll ::  [[String]] -> String
+concatAll [] = []
+concatAll xs = concatList(map concatList xs)
+     where
+          concatList xs = foldl (++) [] xs
 
 {- (b) concat2Either -}               
 data AnEither  = AString String | AnInt Int
                 deriving (Show, Read, Eq)
 
-
+concat2Either:: [[AnEither]] -> AnEither
+concat2Either xs = eitherListConcat(map eitherListConcat xs)
+     where
+          eitherListConcat xs = foldl eitherConcat (AString ("")) xs
+               where
+                    eitherConcat (AnInt x) (AnInt y) = AString ((show x) ++ (show y))
+                    eitherConcat (AString xs) (AnInt y) = AString (xs ++ (show y))
+                    eitherConcat (AnInt x) (AString ys) = AString ((show x) ++ ys)
+                    eitherConcat (AString xs) (AString ys) = AString (xs ++ ys)
 
 -- 4      
 {-  concat2Str -}               
