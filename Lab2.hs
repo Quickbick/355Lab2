@@ -78,10 +78,17 @@ concat2Either xs = eitherListConcat(map eitherListConcat xs)
 
 -- 4      
 {-  concat2Str -}               
+concat2Str:: [[AnEither]] -> String 
+concat2Str xs = foldl (++) [] (map eitherListConcat xs)
+     where
+          eitherListConcat xs = foldl eitherConcat [] xs
+               where
+                    eitherConcat xs (AnInt x) = (xs ++ (show x))
+                    eitherConcat xs (AString ys) = (xs ++ ys)
 
 
-
-
+-- 5 
+{- evaluateTree -}
 data Op = Add | Sub | Mul | Pow
           deriving (Show, Read, Eq)
 
@@ -93,10 +100,6 @@ evaluate Pow x y = x^y
 
 data ExprTree a = ELEAF a | ENODE Op (ExprTree a) (ExprTree a)
                   deriving (Show, Read, Eq)
-
--- 5 
-{- evaluateTree -}
-
 
 
 -- 6
